@@ -47,6 +47,10 @@ class _TweetBoxState extends State<TweetBox> {
                   controller: _tweetTextNewController,
                   obscureText: false,
                   maxLength: 280,
+                  onChanged: (val) {
+                    tweetTextNew = val;
+                    setState(() {});
+                  },
                   validator: (value) {
                     if (value.isEmpty) {
                       return ' ';
@@ -54,6 +58,7 @@ class _TweetBoxState extends State<TweetBox> {
                       return 'Tweet cannot be greater than 280 characters';
                     } else {
                       tweetTextNew = value;
+
                       return null;
                     }
                   },
@@ -73,7 +78,7 @@ class _TweetBoxState extends State<TweetBox> {
                 color: Colors.white,
                 elevation: 5,
                 onPressed: () async {
-                  if (tweetTextNew.length < 1) {
+                  if (tweetTextNew == '') {
                     final snackBarEmptyTweet =
                         SnackBar(content: Text('Tweet cannot be empty'));
                     ScaffoldMessenger.of(context)
@@ -88,10 +93,12 @@ class _TweetBoxState extends State<TweetBox> {
                     tweetModelNew.userId = userModel.uid;
                     setState(() {});
 
-                    var result = await Database().addTweet(
+                    await Database().addTweet(
                         tweetModel: tweetModelNew, email: userModel.email);
 
                     _tweetTextNewController.clear();
+                    tweetTextNew = '';
+                    setState(() {});
 
                     FocusScope.of(context).requestFocus(new FocusNode());
 
