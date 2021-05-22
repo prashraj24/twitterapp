@@ -11,28 +11,54 @@ class Database {
   var uuid = Uuid();
 
   Stream<List<TweetModel>> streamTweets(
-      {@required String userId, @required String email}) async* {
+      {@required String userId, @required String email}) {
     try {
-      var data = firestore
+      return firestore
           .collection("users")
           .doc(email)
           .collection("tweets")
           .where("userId", isEqualTo: userId)
+          .orderBy("tweetTime", descending: true)
           .snapshots()
-          .forEach((doc) {
-        List<TweetModel> tweetsList = [];
-        doc.docs.forEach(
-          (documentSnapshot) {
-            TweetModel model = TweetModel.fromMap(documentSnapshot.data());
-            model.tweetId = documentSnapshot.id;
-            tweetsList.add(model);
-          },
-        );
+          .map((query) {
+        final List<TweetModel> retVal = <TweetModel>[];
+        for (final DocumentSnapshot doc in query.docs) {
+          retVal.add(TweetModel.fromMap(doc.data()));
+        }
+        log('THIS 1: ' + retVal.toString());
+        return retVal;
       });
     } catch (e) {
       rethrow;
     }
   }
+  // Stream<List<TweetModel>> streamTweets(
+  //     {@required String userId, @required String email}) {
+  //   List<TweetModel> tweetsList = [];
+  //   try {
+  //     return firestore
+  //         .collection("users")
+  //         .doc(email)
+  //         .collection("tweets")
+  //         .where("userId", isEqualTo: userId)
+  //         .snapshots()
+  //         .forEach((doc) {
+  //       log('THIS 2: ' + doc.docs[0]['tweetText'].toString());
+
+  //       doc.docs.forEach(
+  //         (documentSnapshot) {
+  //           TweetModel model = TweetModel.fromMap(documentSnapshot.data());
+  //           //model.tweetId = documentSnapshot.id;
+  //           tweetsList.add(model);
+  //         },
+  //       );
+  //       return tweetsList;
+  //     });
+  //     //return data;
+  //   } catch (e) {
+  //     rethrow;
+  //   }
+  // }
 
   Future<void> addTweet({
     TweetModel tweetModel,

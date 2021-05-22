@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:twitterapp/models/tweetModel.dart';
-import 'package:twitterapp/services/database.dart';
+import 'package:timeago/timeago.dart' as timeAgo;
 
 class TweetCard extends StatefulWidget {
   @required
@@ -31,7 +31,10 @@ class _TweetCardState extends State<TweetCard> {
               ),
             ),
             Text(
-              widget.tweetModel.tweetTime.toString(),
+              timeAgo.format(
+                DateTime.fromMillisecondsSinceEpoch(
+                    widget.tweetModel.tweetTime.millisecondsSinceEpoch),
+              ),
               style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,

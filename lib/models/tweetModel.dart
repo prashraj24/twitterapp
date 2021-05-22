@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class TweetModel {
   String tweetId;
   String tweetText;
-  DateTime tweetTime;
+  Timestamp tweetTime;
   String userId;
 
   TweetModel({

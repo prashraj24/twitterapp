@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:twitterapp/models/tweetModel.dart';
@@ -22,6 +23,7 @@ class _TweetBoxState extends State<TweetBox> {
     var width = MediaQuery.of(context).size.width;
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(height: width * 0.1),
         Row(
@@ -52,7 +54,6 @@ class _TweetBoxState extends State<TweetBox> {
                       return 'Tweet cannot be greater than 280 characters';
                     } else {
                       tweetTextNew = value;
-                      setState(() {});
                       return null;
                     }
                   },
@@ -76,7 +77,8 @@ class _TweetBoxState extends State<TweetBox> {
                     TweetModel tweetModelNew = TweetModel();
 
                     tweetModelNew.tweetText = tweetTextNew.trim();
-                    tweetModelNew.tweetTime = DateTime.now();
+                    tweetModelNew.tweetTime =
+                        Timestamp.fromDate(DateTime.now());
                     tweetModelNew.userId = userModel.uid;
                     setState(() {});
 

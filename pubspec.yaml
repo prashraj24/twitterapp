@@ -16,6 +16,7 @@ dependencies:
   cloud_firestore:
   mockito:
   uuid:
+  timeago:
 
   cupertino_icons: ^1.0.1
 
