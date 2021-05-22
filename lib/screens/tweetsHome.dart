@@ -8,6 +8,7 @@ import 'package:twitterapp/services/database.dart';
 import 'package:twitterapp/services/userauth.dart';
 import 'package:twitterapp/widgets/tweetBox.dart';
 import 'package:twitterapp/widgets/tweetCard.dart';
+import 'package:twitterapp/screens/login.dart';
 
 class TweetsHome extends StatefulWidget {
   final FirebaseAuth auth;
@@ -18,6 +19,9 @@ class TweetsHome extends StatefulWidget {
   @override
   _TweetsHomeState createState() => _TweetsHomeState();
 }
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
 class _TweetsHomeState extends State<TweetsHome> {
   @override
@@ -32,6 +36,7 @@ class _TweetsHomeState extends State<TweetsHome> {
       },
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: Row(
             children: [
               Text(
@@ -50,7 +55,7 @@ class _TweetsHomeState extends State<TweetsHome> {
                   color: Colors.white,
                   elevation: 5,
                   onPressed: () async {
-                    await UserAuth(auth: widget.auth).signOut();
+                    UserAuth(auth: _auth).signOut();
                   },
                   child: Text(
                     'Sign out',
@@ -115,10 +120,9 @@ class _TweetsHomeState extends State<TweetsHome> {
                                     shrinkWrap: true,
                                     itemCount: snapshot.data.length,
                                     itemBuilder: (_, index) {
-                                      log('THIS 1: ' +
-                                          snapshot.data[index].toString());
                                       return TweetCard(
                                         tweetModel: snapshot.data[index],
+                                        email: widget.auth.currentUser.email,
                                       );
                                     },
                                   ),
@@ -128,7 +132,7 @@ class _TweetsHomeState extends State<TweetsHome> {
                           );
                         } else {
                           return const Center(
-                            child: Text("loading..."),
+                            child: CircularProgressIndicator(),
                           );
                         }
                       }

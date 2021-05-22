@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,40 +24,12 @@ class Database {
         for (final DocumentSnapshot doc in query.docs) {
           retVal.add(TweetModel.fromMap(doc.data()));
         }
-        log('THIS 1: ' + retVal.toString());
         return retVal;
       });
     } catch (e) {
       rethrow;
     }
   }
-  // Stream<List<TweetModel>> streamTweets(
-  //     {@required String userId, @required String email}) {
-  //   List<TweetModel> tweetsList = [];
-  //   try {
-  //     return firestore
-  //         .collection("users")
-  //         .doc(email)
-  //         .collection("tweets")
-  //         .where("userId", isEqualTo: userId)
-  //         .snapshots()
-  //         .forEach((doc) {
-  //       log('THIS 2: ' + doc.docs[0]['tweetText'].toString());
-
-  //       doc.docs.forEach(
-  //         (documentSnapshot) {
-  //           TweetModel model = TweetModel.fromMap(documentSnapshot.data());
-  //           //model.tweetId = documentSnapshot.id;
-  //           tweetsList.add(model);
-  //         },
-  //       );
-  //       return tweetsList;
-  //     });
-  //     //return data;
-  //   } catch (e) {
-  //     rethrow;
-  //   }
-  // }
 
   Future<void> addTweet({
     TweetModel tweetModel,

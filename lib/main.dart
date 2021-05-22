@@ -74,7 +74,7 @@ class _RootState extends State<Root> {
         } else {
           return Scaffold(
             body: Center(
-              child: Text("Loading..."),
+              child: CircularProgressIndicator(),
             ),
           );
         }

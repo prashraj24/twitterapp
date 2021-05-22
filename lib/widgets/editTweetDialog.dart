@@ -23,49 +23,21 @@ class _TweetCardState extends State<TweetCard> {
         padding: EdgeInsets.all(10.0),
         child: Column(
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    widget.tweetModel.tweetText,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+            AlertDialog(
+              title: new Text("Material Dialog"),
+              content: new Text("Hey! I'm a dialog!"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Close me!'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
               ],
             ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  timeAgo.format(
-                    DateTime.fromMillisecondsSinceEpoch(
-                        widget.tweetModel.tweetTime.millisecondsSinceEpoch),
-                  ),
-                  style: TextStyle(
-                    color: Colors.grey[300],
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            // Text(
-            //   timeAgo.format(
-            //     DateTime.fromMillisecondsSinceEpoch(
-            //         widget.tweetModel.tweetTime.millisecondsSinceEpoch),
-            //   ),
-            //   style: TextStyle(
-            //     fontSize: 15,
-            //     fontWeight: FontWeight.bold,
-            //   ),
-            // ),
           ],
         ),
       ),
     );
   }
 }
-
