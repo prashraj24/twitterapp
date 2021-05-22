@@ -21,7 +21,7 @@ class TwitterApp extends StatelessWidget {
         builder: (context, snapshot) {
           // Check for errors
           if (snapshot.hasError) {
-            return const Scaffold(
+            return Scaffold(
               body: Center(
                 child: Text("Error"),
               ),
@@ -34,7 +34,7 @@ class TwitterApp extends StatelessWidget {
           }
 
           // Otherwise Loading screen while waiting for app to initialize
-          return const Scaffold(
+          return Scaffold(
             body: Center(
               child: Text("Loading..."),
             ),
@@ -72,7 +72,7 @@ class _RootState extends State<Root> {
             );
           }
         } else {
-          return const Scaffold(
+          return Scaffold(
             body: Center(
               child: Text("Loading..."),
             ),

@@ -5,7 +5,7 @@ import 'package:twitterapp/models/tweetModel.dart';
 import 'package:twitterapp/services/database.dart';
 
 class TweetBox extends StatefulWidget {
-  const TweetBox({Key key}) : super(key: key);
+  TweetBox({Key key}) : super(key: key);
 
   @override
   _TweetBoxState createState() => _TweetBoxState();
@@ -36,9 +36,9 @@ class _TweetBoxState extends State<TweetBox> {
                 key: _formKeyTweetText,
                 child: TextFormField(
                   keyboardType: TextInputType.multiline,
-                  key: const ValueKey("tweettextfield"),
+                  key: ValueKey("tweettextfield"),
                   textAlign: TextAlign.center,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                       errorStyle: TextStyle(fontSize: 10),
                       hintText: "create tweet",
                       enabledBorder: OutlineInputBorder(
@@ -49,7 +49,7 @@ class _TweetBoxState extends State<TweetBox> {
                   maxLength: 280,
                   validator: (value) {
                     if (value.isEmpty) {
-                      return 'Tweet cannot be empty';
+                      return ' ';
                     } else if (value.length > 280) {
                       return 'Tweet cannot be greater than 280 characters';
                     } else {

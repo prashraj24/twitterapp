@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:twitterapp/models/tweetModel.dart';
 import 'package:twitterapp/services/database.dart';
 import 'package:twitterapp/services/userauth.dart';
@@ -44,67 +43,66 @@ class _TweetsHomeState extends State<TweetsHome> {
             ],
           ),
         ),
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              TweetBox(),
-              SizedBox(height: width * 0.15),
-              Text('My Tweets'),
-              SizedBox(height: width * 0.06),
-              Container(
-                child: Column(
-                  children: [
-                    StreamBuilder(
-                      stream: Database().streamTweets(
-                          userId: widget.auth.currentUser.uid,
-                          email: widget.auth.currentUser.email),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<List<TweetModel>> snapshot) {
-                        if (snapshot.data == null) {
-                          return const Center(
-                              child: Padding(
-                            padding: EdgeInsets.all(12.0),
-                            child: Text("Error Getting Data"),
-                          ));
-                        } else {
-                          if (snapshot.connectionState ==
-                              ConnectionState.active) {
-                            if (snapshot.data.isEmpty) {
-                              return const Center(
-                                child:
-                                    Text("You don't have any unfinished Todos"),
-                              );
-                            }
-                            //TweetModel tweetModelFromStream = TweetModel.fromMap(snapshot.data[index]);
-                            return Container(
-                              width: width * 0.85,
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: snapshot.data.length,
-                                itemBuilder: (_, index) {
-                                  log('THIS 1: ' +
-                                      snapshot.data[index].toString());
-                                  return TweetCard(
-                                    tweetModel: snapshot.data[index],
-                                  );
-                                },
-                              ),
-                            );
-                          } else {
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            TweetBox(),
+            SizedBox(height: width * 0.15),
+            Text('My Tweets'),
+            SizedBox(height: width * 0.045),
+            Container(
+              child: Column(
+                children: [
+                  StreamBuilder(
+                    stream: Database().streamTweets(
+                        userId: widget.auth.currentUser.uid,
+                        email: widget.auth.currentUser.email),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<TweetModel>> snapshot) {
+                      if (snapshot.data == null) {
+                        return const Center(
+                            child: Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: Text("Error Getting Data"),
+                        ));
+                      } else {
+                        if (snapshot.connectionState ==
+                            ConnectionState.active) {
+                          if (snapshot.data.isEmpty) {
                             return const Center(
-                              child: Text("loading..."),
+                              child:
+                                  Text("You don't have any unfinished Todos"),
                             );
                           }
+                          //TweetModel tweetModelFromStream = TweetModel.fromMap(snapshot.data[index]);
+                          return Container(
+                            width: width * 0.8,
+                            child: ListView.builder(
+                              // physics: AlwaysScrollableScrollPhysics(),
+                              //scrollDirection: Axis.vertical,
+                              //shrinkWrap: true,
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (_, index) {
+                                log('THIS 1: ' +
+                                    snapshot.data[index].toString());
+                                return TweetCard(
+                                  tweetModel: snapshot.data[index],
+                                );
+                              },
+                            ),
+                          );
+                        } else {
+                          return const Center(
+                            child: Text("loading..."),
+                          );
                         }
-                      },
-                    ),
-                  ],
-                ),
+                      }
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
         floatingActionButton: RaisedButton(
           color: Colors.white,

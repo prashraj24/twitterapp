@@ -6,7 +6,7 @@ class TweetCard extends StatefulWidget {
   @required
   final TweetModel tweetModel;
 
-  const TweetCard({Key key, this.tweetModel}) : super(key: key);
+  TweetCard({Key key, this.tweetModel}) : super(key: key);
 
   @override
   _TweetCardState createState() => _TweetCardState();
@@ -15,31 +15,53 @@ class TweetCard extends StatefulWidget {
 class _TweetCardState extends State<TweetCard> {
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
+        padding: EdgeInsets.all(10.0),
+        child: Column(
           children: [
-            Expanded(
-              child: Text(
-                widget.tweetModel.tweetText,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.tweetModel.tweetText,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-            Text(
-              timeAgo.format(
-                DateTime.fromMillisecondsSinceEpoch(
-                    widget.tweetModel.tweetTime.millisecondsSinceEpoch),
-              ),
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  timeAgo.format(
+                    DateTime.fromMillisecondsSinceEpoch(
+                        widget.tweetModel.tweetTime.millisecondsSinceEpoch),
+                  ),
+                  style: TextStyle(
+                    color: Colors.grey[300],
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
+            // Text(
+            //   timeAgo.format(
+            //     DateTime.fromMillisecondsSinceEpoch(
+            //         widget.tweetModel.tweetTime.millisecondsSinceEpoch),
+            //   ),
+            //   style: TextStyle(
+            //     fontSize: 15,
+            //     fontWeight: FontWeight.bold,
+            //   ),
+            // ),
           ],
         ),
       ),

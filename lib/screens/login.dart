@@ -7,7 +7,7 @@ class Login extends StatefulWidget {
   final FirebaseAuth auth;
   final FirebaseFirestore firestore;
 
-  const Login({
+  Login({
     Key key,
     @required this.auth,
     @required this.firestore,
@@ -24,31 +24,29 @@ class _LoginState extends State<Login> {
     return Scaffold(
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(60.0),
+          padding: EdgeInsets.all(60.0),
           child: Builder(builder: (BuildContext context) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextFormField(
-                  key: const ValueKey("email"),
+                  key: ValueKey("email"),
                   textAlign: TextAlign.center,
-                  decoration:
-                      const InputDecoration(hintText: "Enter your email"),
+                  decoration: InputDecoration(hintText: "Enter your email"),
                   controller: _emailController,
                 ),
                 TextFormField(
-                  key: const ValueKey("password"),
+                  key: ValueKey("password"),
                   textAlign: TextAlign.center,
-                  decoration:
-                      const InputDecoration(hintText: "Enter your password"),
+                  decoration: InputDecoration(hintText: "Enter your password"),
                   controller: _passwordController,
                   obscureText: true,
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 20,
                 ),
                 RaisedButton(
-                  key: const ValueKey("signIn"),
+                  key: ValueKey("signIn"),
                   onPressed: () async {
                     final String signinResult =
                         await UserAuth(auth: widget.auth).signIn(
@@ -66,10 +64,10 @@ class _LoginState extends State<Login> {
                       );
                     }
                   },
-                  child: const Text("Sign In"),
+                  child: Text("Sign In"),
                 ),
                 FlatButton(
-                  key: const ValueKey("signUp"),
+                  key: ValueKey("signUp"),
                   onPressed: () async {
                     final String retVal =
                         await UserAuth(auth: widget.auth).createNewUser(
@@ -87,7 +85,7 @@ class _LoginState extends State<Login> {
                       );
                     }
                   },
-                  child: const Text("Sign Up"),
+                  child: Text("Sign Up"),
                 )
               ],
             );
