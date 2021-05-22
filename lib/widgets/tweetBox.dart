@@ -73,6 +73,12 @@ class _TweetBoxState extends State<TweetBox> {
                 color: Colors.white,
                 elevation: 5,
                 onPressed: () async {
+                  if (tweetTextNew.length < 1) {
+                    final snackBarEmptyTweet =
+                        SnackBar(content: Text('Tweet cannot be empty'));
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(snackBarEmptyTweet);
+                  }
                   if (_formKeyTweetText.currentState.validate()) {
                     TweetModel tweetModelNew = TweetModel();
 
@@ -88,8 +94,8 @@ class _TweetBoxState extends State<TweetBox> {
                     _tweetTextNewController.clear();
 
                     FocusScope.of(context).requestFocus(new FocusNode());
-                    final snackBar = SnackBar(content: Text('Tweet Created!'));
 
+                    final snackBar = SnackBar(content: Text('Tweet Created!'));
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }
                 },

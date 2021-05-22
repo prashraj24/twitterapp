@@ -34,26 +34,45 @@ class _TweetsHomeState extends State<TweetsHome> {
         appBar: AppBar(
           title: Row(
             children: [
-              Text('Tweets Home'),
+              Text(
+                'Tweets Home',
+                style: TextStyle(fontSize: 14, color: Colors.white),
+              ),
               Spacer(),
               Text(
                 'logged in: ' + userModel.email,
-                style: TextStyle(fontSize: 14, color: Colors.grey),
+                style: TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+              SizedBox(width: width * 0.03),
+              Container(
+                height: 24,
+                child: RaisedButton(
+                  color: Colors.white,
+                  elevation: 5,
+                  onPressed: () async {
+                    await UserAuth(auth: widget.auth).signOut();
+                  },
+                  child: Text(
+                    'Sign out',
+                    style: TextStyle(fontSize: 12, color: Colors.black),
+                  ),
+                ),
               ),
             ],
           ),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            TweetBox(),
-            SizedBox(height: width * 0.15),
-            Text('My Tweets'),
-            SizedBox(height: width * 0.045),
-            Container(
-              child: Column(
-                children: [
-                  StreamBuilder(
+        body: Container(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TweetBox(),
+                SizedBox(height: width * 0.1),
+                Text('My Tweets'),
+                SizedBox(height: width * 0.045),
+                Container(
+                  child: StreamBuilder(
                     stream: Database().streamTweets(
                         userId: widget.auth.currentUser.uid,
                         email: widget.auth.currentUser.email),
@@ -70,26 +89,42 @@ class _TweetsHomeState extends State<TweetsHome> {
                             ConnectionState.active) {
                           if (snapshot.data.isEmpty) {
                             return const Center(
-                              child:
-                                  Text("You don't have any unfinished Todos"),
+                              child: Text("You don't have any tweets.."),
                             );
                           }
-                          //TweetModel tweetModelFromStream = TweetModel.fromMap(snapshot.data[index]);
-                          return Container(
-                            width: width * 0.8,
-                            child: ListView.builder(
-                              // physics: AlwaysScrollableScrollPhysics(),
-                              //scrollDirection: Axis.vertical,
-                              //shrinkWrap: true,
-                              itemCount: snapshot.data.length,
-                              itemBuilder: (_, index) {
-                                log('THIS 1: ' +
-                                    snapshot.data[index].toString());
-                                return TweetCard(
-                                  tweetModel: snapshot.data[index],
-                                );
-                              },
-                            ),
+                          return Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 64),
+                                    child: Text('No: ' +
+                                        snapshot.data.length.toString()),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                width: width * 0.8,
+                                height: width * 1.1,
+                                child: Scrollbar(
+                                  thickness: 2,
+                                  child: ListView.builder(
+                                    physics: AlwaysScrollableScrollPhysics(),
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemCount: snapshot.data.length,
+                                    itemBuilder: (_, index) {
+                                      log('THIS 1: ' +
+                                          snapshot.data[index].toString());
+                                      return TweetCard(
+                                        tweetModel: snapshot.data[index],
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
                           );
                         } else {
                           return const Center(
@@ -99,22 +134,13 @@ class _TweetsHomeState extends State<TweetsHome> {
                       }
                     },
                   ),
-                ],
-              ),
+                ),
+                SizedBox(height: width * 0.11),
+              ],
             ),
-          ],
-        ),
-        floatingActionButton: RaisedButton(
-          color: Colors.white,
-          elevation: 5,
-          onPressed: () async {
-            await UserAuth(auth: widget.auth).signOut();
-          },
-          child: Text(
-            'Sign out',
-            style: TextStyle(fontSize: 18, color: Colors.black),
           ),
         ),
+        //floatingActionButton:
       ),
     );
   }
