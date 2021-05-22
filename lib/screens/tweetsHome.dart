@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:twitterapp/models/tweetModel.dart';
 import 'package:twitterapp/services/database.dart';
 import 'package:twitterapp/services/userauth.dart';
+import 'package:twitterapp/widgets/tweetBox.dart';
+import 'package:twitterapp/widgets/tweetCard.dart';
 
 class TweetsHome extends StatefulWidget {
   final FirebaseAuth auth;
@@ -16,99 +20,79 @@ class TweetsHome extends StatefulWidget {
   _TweetsHomeState createState() => _TweetsHomeState();
 }
 
-final User userModel = FirebaseAuth.instance.currentUser;
-String tweetTextNew = '';
-
-final TextEditingController _tweetTextNewController = TextEditingController();
-final _formKeyTweetText = GlobalKey<FormState>();
-
 class _TweetsHomeState extends State<TweetsHome> {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Text('Tweets Home'),
-            Spacer(),
-            Text(
-              'logged in: ' + userModel.email,
-              style: TextStyle(fontSize: 14, color: Colors.grey),
-            ),
-          ],
+    log(widget.auth.currentUser.uid);
+    log(widget.auth.currentUser.email);
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        FocusScope.of(context).requestFocus(new FocusNode());
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Row(
+            children: [
+              Text('Tweets Home'),
+              Spacer(),
+              Text(
+                'logged in: ' + userModel.email,
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+            ],
+          ),
         ),
-      ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            SizedBox(height: width * 0.1),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: width * 0.65,
-                  child: Form(
-                    key: _formKeyTweetText,
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          keyboardType: TextInputType.multiline,
-                          key: const ValueKey("tweettextfield"),
-                          textAlign: TextAlign.center,
-                          decoration:
-                              const InputDecoration(hintText: "create tweet"),
-                          controller: _tweetTextNewController,
-                          obscureText: false,
-                          maxLength: 280,
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Tweet cannot be empty';
-                            } else if (value.length > 280) {
-                              return 'Tweet cannot be greater than 280 characters';
-                            } else {
-                              tweetTextNew = value;
-                              setState(() {});
-                              return null;
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                IconButton(
-                    iconSize: 32,
-                    color: Colors.white,
-                    onPressed: () async {
-                      if (_formKeyTweetText.currentState.validate()) {
-                        TweetModel tweetModelNew = TweetModel();
-
-                        tweetModelNew.tweetText = tweetTextNew.trim();
-                        tweetModelNew.tweetTime = DateTime.now();
-                        tweetModelNew.userId = userModel.uid;
-                        setState(() {});
-
-                        await Database().addTweet(
-                            tweetModel: tweetModelNew, email: userModel.email);
-                      }
-                    },
-                    icon: Icon(Icons.add_box_rounded, color: Colors.white)),
-              ],
-            ),
-          ],
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              TweetBox(),
+              SizedBox(height: width * 0.15),
+              Text('My Tweets'),
+              SizedBox(height: width * 0.06),
+              StreamBuilder(
+                stream: Database().streamTweets(
+                    userId: widget.auth.currentUser.uid,
+                    email: widget.auth.currentUser.email),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<TweetModel>> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.active) {
+                    if (snapshot.data.isEmpty) {
+                      return const Center(
+                        child: Text("You don't have any unfinished Todos"),
+                      );
+                    }
+                    //TweetModel tweetModelFromStream = TweetModel.fromMap(snapshot.data[index]);
+                    return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (_, index) {
+                        return TweetCard(
+                          tweetModel: snapshot.data[index],
+                        );
+                      },
+                    );
+                  } else {
+                    return const Center(
+                      child: Text("loading..."),
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: RaisedButton(
-        color: Colors.white,
-        elevation: 5,
-        onPressed: () async {
-          await UserAuth(auth: widget.auth).signOut();
-        },
-        child: Text(
-          'Sign out',
-          style: TextStyle(fontSize: 18, color: Colors.black),
+        floatingActionButton: RaisedButton(
+          color: Colors.white,
+          elevation: 5,
+          onPressed: () async {
+            await UserAuth(auth: widget.auth).signOut();
+          },
+          child: Text(
+            'Sign out',
+            style: TextStyle(fontSize: 18, color: Colors.black),
+          ),
         ),
       ),
     );

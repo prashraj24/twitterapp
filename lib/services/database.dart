@@ -1,26 +1,33 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:twitterapp/models/tweetModel.dart';
+import 'package:uuid/uuid.dart';
 
 class Database {
-  final FirebaseFirestore firestore;
-
-  Database({this.firestore});
+  var firestore = FirebaseFirestore.instance;
+  var uuid = Uuid();
 
   Stream<List<TweetModel>> streamTweets(
-      {String userId, String tweetId, String email}) {
+      {@required String userId, @required String email}) async* {
     try {
-      return firestore
+      var data = firestore
           .collection("users")
           .doc(email)
           .collection("tweets")
           .where("userId", isEqualTo: userId)
           .snapshots()
-          .map((query) {
-        final List<TweetModel> retVal = <TweetModel>[];
-        for (final DocumentSnapshot doc in query.docs) {
-          retVal.add(TweetModel.fromMap(doc.data()));
-        }
-        return retVal;
+          .forEach((doc) {
+        List<TweetModel> tweetsList = [];
+        doc.docs.forEach(
+          (documentSnapshot) {
+            TweetModel model = TweetModel.fromMap(documentSnapshot.data());
+            model.tweetId = documentSnapshot.id;
+            tweetsList.add(model);
+          },
+        );
       });
     } catch (e) {
       rethrow;
@@ -31,12 +38,16 @@ class Database {
     TweetModel tweetModel,
     String email,
   }) async {
+    var tweetIdNew = uuid.v1();
+
+    tweetModel.tweetId = tweetIdNew;
     try {
       firestore
           .collection("users")
           .doc(email)
           .collection("tweets")
-          .add(tweetModel.toMap());
+          .doc(tweetIdNew)
+          .set(tweetModel.toMap());
     } catch (e) {
       rethrow;
     }

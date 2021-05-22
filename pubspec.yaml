@@ -15,6 +15,7 @@ dependencies:
   firebase_auth:
   cloud_firestore:
   mockito:
+  uuid:
 
   cupertino_icons: ^1.0.1
 
