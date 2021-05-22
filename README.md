@@ -23,3 +23,20 @@ samples, guidance on mobile development, and a full API reference.
 
 ### Home Page 2 - Tweets Created
 ![Home Page 2 - Tweets Created](https://user-images.githubusercontent.com/31348991/119241520-9c6e3200-bb74-11eb-8b00-7e3c2bc60bde.jpeg)
+
+
+### Firestore Schema - User Document
+![Firestore Schema 1](https://user-images.githubusercontent.com/31348991/119241559-f5d66100-bb74-11eb-91cb-2c231413e11e.PNG)
+
+
+### Firestore Schema - User's Tweets Documents
+![Firestore Schema - tweet model](https://user-images.githubusercontent.com/31348991/119241579-23bba580-bb75-11eb-9bed-e30949a1a0cf.PNG)
+
+
+
+
+
+
+
+
+
