@@ -58,4 +58,30 @@ class UserAuth {
       rethrow;
     }
   }
+
+//Below is for test case without adding user document to DB
+  Future<String> createNewUserTestCase({String email, String password}) async {
+    try {
+      await auth.createUserWithEmailAndPassword(
+        email: email.trim(),
+        password: password.trim(),
+      );
+
+      // UserModel userModel = UserModel();
+      // userModel.email = email.trim();
+      // userModel.joinDate = DateTime.now();
+      // userModel.userId = auth.currentUser.uid;
+
+      // await FirebaseFirestore.instance
+      //     .collection("users")
+      //     .doc(email)
+      //     .set(userModel.toMap());
+
+      return "Success";
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

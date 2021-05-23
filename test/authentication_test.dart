@@ -26,44 +26,49 @@ void main() {
     expectLater(auth.user, emitsInOrder([_mockUser]));
   });
 
-  test("create account", () async {
+  test("create user", () async {
     when(
       mockFirebaseAuth.createUserWithEmailAndPassword(
-          email: "2@gmail.com", password: "111111"),
+          email: "2@gmail.com", password: "123456"),
     ).thenAnswer((realInvocation) => null);
 
-    expect(await auth.createNewUser(email: "2@gmail.com", password: "111111"),
+    expect(
+        await auth.createNewUserTestCase(
+            email: "2@gmail.com", password: "123456"),
         "Success");
   });
 
   test("create account exception", () async {
     when(
       mockFirebaseAuth.createUserWithEmailAndPassword(
-          email: "2@gmail.com", password: "111111"),
+          email: "2@gmail.com", password: "123456"),
     ).thenAnswer((realInvocation) => throw FirebaseAuthException(
-        message: "You screwed up", code: 'create user did not work'));
+        message: "create user did not work", code: 'create user did not work'));
 
-    expect(await auth.createNewUser(email: "2@gmail.com", password: "111111"),
+    expect(
+        await auth.createNewUserTestCase(
+            email: "2@gmail.com", password: "123456"),
         "create user did not work");
   });
 
   test("sign in", () async {
     when(
       mockFirebaseAuth.signInWithEmailAndPassword(
-          email: "2@gmail.com", password: "111111"),
+          email: "2@gmail.com", password: "123456"),
     ).thenAnswer((realInvocation) => null);
 
-    expect(await auth.signIn(email: "2", password: "111111"), "Success");
+    expect(await auth.signIn(email: "2@gmail.com", password: "123456"),
+        "Successfully Signed In");
   });
 
   test("sign in exception", () async {
     when(
       mockFirebaseAuth.signInWithEmailAndPassword(
-          email: "2@gmail.com", password: "111111"),
+          email: "2@gmail.com", password: "123456"),
     ).thenAnswer((realInvocation) => throw FirebaseAuthException(
-        message: "You screwed up", code: 'sign in did not work'));
+        message: "sign in did not work", code: 'sign in did not work'));
 
-    expect(await auth.signIn(email: "2@gmail.com", password: "111111"),
+    expect(await auth.signIn(email: "2@gmail.com", password: "123456"),
         "sign in did not work");
   });
 
@@ -72,15 +77,6 @@ void main() {
       mockFirebaseAuth.signOut(),
     ).thenAnswer((realInvocation) => null);
 
-    expect(await auth.signOut(), "Success");
-  });
-
-  test("create account exception", () async {
-    when(
-      mockFirebaseAuth.signOut(),
-    ).thenAnswer((realInvocation) => throw FirebaseAuthException(
-        message: "You screwed up", code: 'sign out did not work'));
-
-    expect(await auth.signOut(), "sign out did not work");
+    expect(await auth.signOut(), "Successfully Signed Out");
   });
 }
