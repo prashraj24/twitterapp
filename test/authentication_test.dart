@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:twitterapp/services/userauth.dart';
@@ -22,6 +23,9 @@ void main() {
   setUp(() {});
   tearDown(() {});
 
+  TestWidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
+
   test("emit occurs", () async {
     expectLater(auth.user, emitsInOrder([_mockUser]));
   });
@@ -34,7 +38,7 @@ void main() {
 
     expect(
         await auth.createNewUserTestCase(
-            email: "2@gmail.com", password: "123456"),
+            email: "2@gmail.com", password: "123456", userIdMock: '123xyz'),
         "Success");
   });
 
@@ -47,7 +51,7 @@ void main() {
 
     expect(
         await auth.createNewUserTestCase(
-            email: "2@gmail.com", password: "123456"),
+            email: "2@gmail.com", password: "123456", userIdMock: '123xyz'),
         "create user did not work");
   });
 
