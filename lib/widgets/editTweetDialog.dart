@@ -26,9 +26,8 @@ class _EditTweetDialogState extends State<EditTweetDialog> {
       child: AlertDialog(
         contentPadding: EdgeInsets.all(12),
         title: Text("Edit Tweet"),
-        content: Expanded(
-            child: EditTweetBox(
-                tweetModel: widget.tweetModel, contextedit: contextedit)),
+        content: EditTweetBox(
+            tweetModel: widget.tweetModel, contextedit: contextedit),
         actions: <Widget>[
           FlatButton(
             child: Text('Close me!'),
