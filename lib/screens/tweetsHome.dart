@@ -115,6 +115,7 @@ class _TweetsHomeState extends State<TweetsHome> {
                                 child: Scrollbar(
                                   thickness: 2,
                                   child: ListView.builder(
+                                    key: ValueKey("tweetsFromDb"),
                                     physics: AlwaysScrollableScrollPhysics(),
                                     scrollDirection: Axis.vertical,
                                     shrinkWrap: true,

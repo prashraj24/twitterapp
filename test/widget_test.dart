@@ -1,33 +1,25 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:twitterapp/screens/tweetsHome.dart';
+import 'package:twitterapp/widgets/addTweetBox.dart';
 
 void main() {
-  testWidgets("add a todo", (WidgetTester tester) async {
-    //find all widgets needed
-    final addField = find.byKey(ValueKey("addField"));
-    final addButton = find.byKey(ValueKey("addButton"));
+  TestWidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
 
-    //execute the actual test
-    await tester.pumpWidget(MaterialApp(home: TweetsHome()));
-    await tester.enterText(addField, "Make Widget Testing Video");
+//test for creating a tweet
+  testWidgets("create a tweet", (WidgetTester tester) async {
+    final tweetTextField = find.byKey(ValueKey("tweetTextfield"));
+    final addButton = find.byKey(ValueKey("createTweetButton"));
+
+    //execute test
+    await tester.pumpWidget(MaterialApp(home: AddTweetBox()));
+    await tester.enterText(tweetTextField, "This is a test case tweet!");
     await tester.tap(addButton);
-    await tester.pump(); //rebuilds your widget
+    await tester.pump(); //rebuilds widget
 
-    //check outputs
-    expect(find.text("Make Widget Testing Video"), findsOneWidget);
-  });
-
-  testWidgets("add from database", (WidgetTester tester) async {
-    //find all widgets needed
-    final loadFromDatabase = find.byKey(ValueKey("loadFromDatabase"));
-
-    //execute the actual test
-    await tester.pumpWidget(MaterialApp(home: TweetsHome()));
-    await tester.tap(loadFromDatabase);
-    await tester.pump(Duration(seconds: 2)); //rebuilds your widget
-
-    //check outputs
-    expect(find.text("From Database"), findsOneWidget);
+    //check output
+    expect(find.text("This is a test case tweet!"), findsOneWidget);
   });
 }
