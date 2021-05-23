@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:twitterapp/models/tweetModel.dart';
 import 'package:twitterapp/services/database.dart';
 import 'package:twitterapp/services/userauth.dart';
-import 'package:twitterapp/widgets/tweetBox.dart';
+import 'package:twitterapp/widgets/addTweetBox.dart';
 import 'package:twitterapp/widgets/tweetCard.dart';
 import 'package:twitterapp/screens/login.dart';
 
@@ -72,10 +72,10 @@ class _TweetsHomeState extends State<TweetsHome> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                TweetBox(),
-                SizedBox(height: width * 0.1),
+                AddTweetBox(),
+                SizedBox(height: width * 0.12),
                 Text('My Tweets'),
-                SizedBox(height: width * 0.045),
+                SizedBox(height: width * 0.040),
                 Container(
                   child: StreamBuilder(
                     stream: Database().streamTweets(

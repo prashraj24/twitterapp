@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:twitterapp/models/tweetModel.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
 import 'package:twitterapp/services/database.dart';
+import 'package:twitterapp/widgets/editTweetDialog.dart';
 
 class TweetCard extends StatefulWidget {
   @required
@@ -45,6 +46,29 @@ class _TweetCardState extends State<TweetCard> {
                 SizedBox(width: width * 0.03),
                 InkWell(
                   onTap: () async {
+                    showDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (BuildContext context) {
+                          return EditTweetDialog(
+                            tweetModel: widget.tweetModel,
+                            onEditComplete: () {
+                              final tweetDeleted = SnackBar(
+                                content: Text('Tweet Edited Succcessfully!'),
+                                elevation: 8,
+                                duration: Duration(seconds: 3),
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(tweetDeleted);
+                            },
+                          );
+                        });
+                  },
+                  child: Icon(Icons.edit, size: 26),
+                ),
+                SizedBox(width: width * 0.025),
+                InkWell(
+                  onTap: () async {
                     await Database().deleteTweet(
                         tweetId: widget.tweetModel.tweetId,
                         email: widget.email);
@@ -77,16 +101,6 @@ class _TweetCardState extends State<TweetCard> {
                 ),
               ],
             ),
-            // Text(
-            //   timeAgo.format(
-            //     DateTime.fromMillisecondsSinceEpoch(
-            //         widget.tweetModel.tweetTime.millisecondsSinceEpoch),
-            //   ),
-            //   style: TextStyle(
-            //     fontSize: 15,
-            //     fontWeight: FontWeight.bold,
-            //   ),
-            // ),
           ],
         ),
       ),

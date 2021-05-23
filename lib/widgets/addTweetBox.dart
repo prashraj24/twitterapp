@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:twitterapp/models/tweetModel.dart';
 import 'package:twitterapp/services/database.dart';
 
-class TweetBox extends StatefulWidget {
-  TweetBox({Key key}) : super(key: key);
+class AddTweetBox extends StatefulWidget {
+  AddTweetBox({Key key}) : super(key: key);
 
   @override
-  _TweetBoxState createState() => _TweetBoxState();
+  _AddTweetBoxState createState() => _AddTweetBoxState();
 }
 
 final User userModel = FirebaseAuth.instance.currentUser;
@@ -17,7 +17,7 @@ String tweetTextNew = '';
 final TextEditingController _tweetTextNewController = TextEditingController();
 final _formKeyTweetText = GlobalKey<FormState>();
 
-class _TweetBoxState extends State<TweetBox> {
+class _AddTweetBoxState extends State<AddTweetBox> {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -46,19 +46,18 @@ class _TweetBoxState extends State<TweetBox> {
                               BorderSide(color: Colors.white, width: 1))),
                   controller: _tweetTextNewController,
                   obscureText: false,
-                  maxLength: 280,
                   onChanged: (val) {
                     tweetTextNew = val;
                     setState(() {});
                   },
                   validator: (value) {
-                    if (value.isEmpty) {
-                      return ' ';
-                    } else if (value.length > 280) {
+                    // if (value.isEmpty) {
+                    //   return ' ';
+                    // } else
+                    if (value.length > 280) {
                       return 'Tweet cannot be greater than 280 characters';
                     } else {
                       tweetTextNew = value;
-
                       return null;
                     }
                   },

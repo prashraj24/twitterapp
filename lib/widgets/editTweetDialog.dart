@@ -1,42 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:twitterapp/models/tweetModel.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
+import 'package:twitterapp/widgets/addTweetBox.dart';
+import 'package:twitterapp/widgets/editTweetBox.dart';
 
-class TweetCard extends StatefulWidget {
+class EditTweetDialog extends StatefulWidget {
   @required
-  final TweetModel tweetModel;
+  TweetModel tweetModel;
+  VoidCallback onEditComplete;
 
-  TweetCard({Key key, this.tweetModel}) : super(key: key);
+  EditTweetDialog({Key key, this.tweetModel, this.onEditComplete})
+      : super(key: key);
 
   @override
-  _TweetCardState createState() => _TweetCardState();
+  _EditTweetDialogState createState() => _EditTweetDialogState();
 }
 
-class _TweetCardState extends State<TweetCard> {
+class _EditTweetDialogState extends State<EditTweetDialog> {
   @override
-  Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
+  Widget build(BuildContext contextedit) {
+    var width = MediaQuery.of(contextedit).size.width;
 
-    return Card(
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      child: Padding(
-        padding: EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            AlertDialog(
-              title: new Text("Material Dialog"),
-              content: new Text("Hey! I'm a dialog!"),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('Close me!'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            ),
-          ],
-        ),
+    return Container(
+      width: width * 0.75,
+      child: AlertDialog(
+        contentPadding: EdgeInsets.all(12),
+        title: Text("Edit Tweet"),
+        content: Expanded(
+            child: EditTweetBox(
+                tweetModel: widget.tweetModel, contextedit: contextedit)),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Close me!'),
+            onPressed: () {
+              Navigator.of(contextedit).pop();
+            },
+          )
+        ],
       ),
     );
   }

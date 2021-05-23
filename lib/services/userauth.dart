@@ -48,7 +48,7 @@ class UserAuth {
     }
   }
 
-  Future<void> signOut() async {
+  Future<String> signOut() async {
     try {
       await auth.signOut();
       return "Successfully Signed Out";

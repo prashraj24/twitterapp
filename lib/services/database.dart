@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -51,13 +52,17 @@ class Database {
   }
 
   Future<void> editTweet(
-      {String tweetId, String email, TweetModel tweetModel}) async {
+      {@required String email, @required TweetModel tweetModel}) async {
+        log('tweet id:  ' + tweetModel.tweetId);
+    log('email: ' + email);
     try {
+      // log('tweet id:  ' + tweetModel.tweetId);
+      // log('email: ' + email);
       firestore
           .collection("users")
           .doc(email)
           .collection("tweets")
-          .doc(tweetId)
+          .doc(tweetModel.tweetId)
           .update(tweetModel.toMap());
     } catch (e) {
       rethrow;
